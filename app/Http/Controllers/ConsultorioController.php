@@ -31,11 +31,9 @@ class ConsultorioController extends Controller
     {
         // Validar los datos
         $validated = $request->validate([
-            'id_equipomedico' => 'required|integer|unique:equipo_medico,id_equipomedico', 
-            'nombre_equipo' => 'required|string|max:100',
-            'descripcion' => 'required|string|max:100',
-            'fecha_uso' => 'required|date',
-            'id_medico' => 'required|integer',
+            'id_consultorio' => 'required|integer|unique:consultorio,id_consultorio', 
+            'ubicacion_consultorio' => 'required|string',
+            'capacidad_consultorio' => 'required|integer',
             'id_estatus' => 'required|integer',
             'id_estatus_usuario' => 'required|integer',
         ]);
