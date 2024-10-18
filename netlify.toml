@@ -1,2 +1,9 @@
+[build]
+  command = "composer install --prefer-dist && npm install && npm run build"
+  publish = "public"
+
 [build.environment]
-PHP_VERSION = "8.1"
+  PHP_VERSION = "8.1"
+
+[build.processing]
+  publish = "public"
