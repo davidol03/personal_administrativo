@@ -6,10 +6,11 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
-    unzip \
+    zip \
     git \
+    curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd zip
+    && docker-php-ext-install gd zip curl
 
 # Establecer el directorio de trabajo
 WORKDIR /var/www/html
