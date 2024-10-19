@@ -1,32 +1,37 @@
-# Imagen base oficial de PHP con Apache
+# Usar la imagen base de PHP con Apache
 FROM php:8.1-apache
 
-# Instalar dependencias necesarias
+# Instalar dependencias del sistema y extensiones de PHP necesarias
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    unzip \
+    git \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd \
-    && docker-php-ext-install pdo pdo_mysql
-
-# Instalar Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+    && docker-php-ext-install gd zip
 
 # Establecer el directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar los archivos del proyecto Laravel
-COPY . .
+# Copiar solo los archivos de composer primero para aprovechar la cache
+COPY composer.json composer.lock ./
+
+# Instalar Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Instalar las dependencias de Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-# Dar permisos de escritura a las carpetas necesarias
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Copiar el resto de los archivos del proyecto
+COPY . .
 
-# Exponer el puerto 80 para el servidor web
+# Dar permisos de escritura a las carpetas necesarias
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+# Exponer el puerto 80
 EXPOSE 80
 
-# Ejecutar el servidor Apache
+# Iniciar Apache
 CMD ["apache2-foreground"]
+
