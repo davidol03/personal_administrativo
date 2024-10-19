@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     git \
     curl \
+    unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd zip curl
 
@@ -35,5 +36,6 @@ EXPOSE 80
 
 # Iniciar Apache
 CMD ["apache2-foreground"]
+
 
 
